@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 import api from "../api/client";
 import {CreateFeatureFlag} from "./CreateFeatureFlagPage";
 import type { FeatureFlag } from "../types/featureFlag";
+import { EditFeatureFlag } from "./EditFeatureFlagPage";
 
 
 export function FeatureFlags(){
 
   const [flags, setFlags] = useState<FeatureFlag[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-
+  const [selectedFlag, setSelectedFlag] = useState<FeatureFlag | null>(null);
+  const [editOpen, setEditOpen] = useState(false);
 
     const toggleFlag = async (id: number, enabled: boolean) => {
       try {
@@ -119,8 +121,9 @@ export function FeatureFlags(){
                   </td>
                   
                   <td className="px-6 py-4 space-x-3">
-                    <button className="text-blue-600 hover:underline" > Edit </button>
-                    <button className="text-red-600 hover:underline"> Delete </button>
+                    <button className="text-blue-600 hover:underline" onClick={() => { setSelectedFlag(flag); setEditOpen(true); }} > Edit </button>
+                          <EditFeatureFlag open={editOpen} selectedFlag={selectedFlag} onClose={() => { setEditOpen(false); setSelectedFlag(null); }} setFlags={setFlags} />
+                    <button className="text-red-600 hover:underline" onClick={() => deleteFlag(flag.id)}> Delete </button>
                   </td>
                 </tr>
               ))}
