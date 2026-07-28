@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import api from "../api/client";
+import {CreateFeatureFlag} from "./CreateFeatureFlagPage";
 import type { FeatureFlag } from "../types/featureFlag";
 
 
 export function FeatureFlags(){
 
   const [flags, setFlags] = useState<FeatureFlag[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
+
 
     const toggleFlag = async (id: number, enabled: boolean) => {
       try {
@@ -43,7 +46,9 @@ export function FeatureFlags(){
             </h1>
           </div>
 
-          <button className="rounded-lg bg-blue-600 px-5 py-2.5 text-white hover:bg-blue-700" > + Create Flag </button>
+          <button className="rounded-lg bg-blue-600 px-5 py-2.5 text-white hover:bg-blue-700"         onClick={() => setOpen(true)}
+            onClick={() => setIsOpen(true)}> + Create Flag </button>
+              <CreateFeatureFlag open={isOpen} onClose={() => setIsOpen(false)}  setFlags={setFlags}/>
         </div>
 
         {/* Search */}
@@ -90,7 +95,7 @@ export function FeatureFlags(){
 
                   <td className="px-6 py-4">
                     <span className="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-700">
-                      {flag.name}
+                      {flag.environment}
                     </span>
                   </td>
 
@@ -108,10 +113,14 @@ export function FeatureFlags(){
                       />
                     </button>
                   </td>
+
+                                    <td className="px-6 py-4 text-slate-500">
+                    {flag.name}
+                  </td>
                   
                   <td className="px-6 py-4 space-x-3">
                     <button className="text-blue-600 hover:underline" > Edit </button>
-                    <button className="text-red-600 hover:underline" onClick={() => deleteFlag(flag.id)}> Delete </button>
+                    <button className="text-red-600 hover:underline"> Delete </button>
                   </td>
                 </tr>
               ))}
