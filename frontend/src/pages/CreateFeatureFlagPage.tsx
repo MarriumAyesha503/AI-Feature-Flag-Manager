@@ -11,19 +11,20 @@ interface CreateFeatureFlagProps{
 export function CreateFeatureFlag({ open, onClose, setFlags }: CreateFeatureFlagProps) {
 
           const [name, setName] = useState("");
-          const [featureKey, setFeatureKey] = useState("");
           const [description, setDescription] = useState("");
           const [enabled, setEnabled] = useState(true);
           const [rollout, setRollout] = useState(25);
+          const [environment, setEnvironment] = useState("dev");
+          const environments = [ "dev", "test", "stage", "prod" ];
 
           const handleSubmit = async () => {
             const newFlag = {
               name: name,
-              feature_key: featureKey,
               description: description,
               enabled,
               rollout_percentage: rollout,
-              project_id: 1
+              project_id: 1,
+              environment: environment
             };
 
               try {
@@ -44,7 +45,6 @@ export function CreateFeatureFlag({ open, onClose, setFlags }: CreateFeatureFlag
 
       <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
         <div className="w-full max-w-4xl rounded-2xl bg-white shadow-2xl">
-
           <div className="flex items-center justify-between border-b px-8 py-5">
             <div>
               <h2 className="text-2xl font-bold text-slate-800">
@@ -71,18 +71,7 @@ export function CreateFeatureFlag({ open, onClose, setFlags }: CreateFeatureFlag
 
                 <input
                   className="w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-                  placeholder="New Dashboard" onChange={(e) => setName(e.target.value)}
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Feature Key
-                </label>
-
-                <input
-                  className="w-full rounded-lg border px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
-                  placeholder="new_dashboard" onChange={(e) => setFeatureKey(e.target.value)}
+                  placeholder="Enter flag name" onChange={(e) => setName(e.target.value)}
                 />
               </div>
 
@@ -97,6 +86,15 @@ export function CreateFeatureFlag({ open, onClose, setFlags }: CreateFeatureFlag
                   placeholder="Describe this feature..."
                   onChange={(e) => setDescription(e.target.value)}
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Environment
+                </label>
+                  <select value={environment} onChange={(e) => setEnvironment(e.target.value)} >
+                    {environments.map((env) => ( <option key={env} value={env}> {env} </option> ))}
+                  </select>
               </div>
 
               {/* Toggle */}

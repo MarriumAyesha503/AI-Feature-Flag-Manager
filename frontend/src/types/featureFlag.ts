@@ -7,5 +7,6 @@ export interface FeatureFlag {
   rollout_percentage: number;
   project_id: number;
   environment: string;
+  last_updated: string;
 }
 

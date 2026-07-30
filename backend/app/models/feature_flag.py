@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, func, Enum
 from app.database import Base
 
 
@@ -12,3 +12,5 @@ class FeatureFlag(Base):
     enabled = Column(Boolean,default=False)
     rollout_percentage = Column(Integer,default=0)
     project_id = Column(Integer)
+    environment = Column( Enum( "dev", "test", "stage", "prod", name="environment_enum" ), default="dev")
+    last_updated = Column( DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False )

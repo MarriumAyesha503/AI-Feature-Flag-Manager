@@ -3,7 +3,7 @@ import api from "../api/client";
 import {CreateFeatureFlag} from "./CreateFeatureFlagPage";
 import type { FeatureFlag } from "../types/featureFlag";
 import { EditFeatureFlag } from "./EditFeatureFlagPage";
-
+import { Pencil, Trash2 } from "lucide-react";
 
 export function FeatureFlags(){
 
@@ -75,8 +75,8 @@ export function FeatureFlags(){
                 <th className="px-6 py-4">Feature</th>
                 <th className="px-6 py-4">Rollout</th>
                 <th className="px-6 py-4">Environment</th>
-                <th className="px-6 py-4">Status</th>
                 <th className="px-6 py-4">Last Updated</th>
+                <th className="px-6 py-4">Status</th>
                 <th className="px-6 py-4">Actions</th>
               </tr>
             </thead>
@@ -102,9 +102,9 @@ export function FeatureFlags(){
                   </td>
 
                   <td className="px-6 py-4 text-slate-500">
-                    {flag.name}
+                      {new Date(flag.last_updated).toLocaleString()}
                   </td>
-
+                
                   <td className="px-6 py-4">
                     <button
                       onClick={() => toggleFlag(flag.id, flag.enabled)}
@@ -115,15 +115,11 @@ export function FeatureFlags(){
                       />
                     </button>
                   </td>
-
-                                    <td className="px-6 py-4 text-slate-500">
-                    {flag.name}
-                  </td>
                   
                   <td className="px-6 py-4 space-x-3">
-                    <button className="text-blue-600 hover:underline" onClick={() => { setSelectedFlag(flag); setEditOpen(true); }} > Edit </button>
+                    <button className="text-blue-600 hover:underline" onClick={() => { setSelectedFlag(flag); setEditOpen(true); }} ><Pencil size={18} /> </button>
                           <EditFeatureFlag open={editOpen} selectedFlag={selectedFlag} onClose={() => { setEditOpen(false); setSelectedFlag(null); }} setFlags={setFlags} />
-                    <button className="text-red-600 hover:underline" onClick={() => deleteFlag(flag.id)}> Delete </button>
+                    <button className="text-red-600 hover:underline" onClick={() => deleteFlag(flag.id)}> <Trash2 size={18} /> </button>
                   </td>
                 </tr>
               ))}
