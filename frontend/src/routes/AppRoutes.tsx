@@ -1,11 +1,12 @@
 import { Routes, Route } from "react-router-dom";
 
 import { FeatureFlags } from "../pages/FeatureFlagsPage";
-import {CreateFeatureFlag} from "../pages/CreateFeatureFlagPage";
+import { CreateFeatureFlag } from "../pages/CreateFeatureFlagPage";
 
 export function AppRoutes(){
 
     return (
+        <>
         <Routes>
           <Route
                 path="/"
@@ -13,10 +14,13 @@ export function AppRoutes(){
             />
 
             <Route
-                path="/create-flag"
+                path="/create-feature-flag"
                 element={<CreateFeatureFlag />}
             />
  
         </Routes>
+
+        </>
+
     )
 }

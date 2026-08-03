@@ -4,6 +4,8 @@ import {CreateFeatureFlag} from "./CreateFeatureFlagPage";
 import type { FeatureFlag } from "../types/featureFlag";
 import { EditFeatureFlag } from "./EditFeatureFlagPage";
 import { Pencil, Trash2 } from "lucide-react";
+import { AssistantChat } from "../components/AssistantChat";
+
 
 export function FeatureFlags(){
 
@@ -11,6 +13,15 @@ export function FeatureFlags(){
   const [isOpen, setIsOpen] = useState(false);
   const [selectedFlag, setSelectedFlag] = useState<FeatureFlag | null>(null);
   const [editOpen, setEditOpen] = useState(false);
+
+    const fetchFeatureFlags = async () => {
+    try {
+        const response = await api.get("/feature-flags");
+        setFlags(response.data);
+    } catch (err) {
+        console.error(err);
+    }
+};
 
     const toggleFlag = async (id: number, enabled: boolean) => {
       try {
@@ -30,10 +41,7 @@ export function FeatureFlags(){
       }
   };
 
-    useEffect(() => {
-        api.get("/feature-flags") .then(response => { setFlags(response.data); })
-          .catch(error => { console.error(error); });
-    }, []);
+    useEffect(() => { fetchFeatureFlags(); }, []);
 
  return (
     <div className="min-h-screen bg-slate-100 p-8">
@@ -51,18 +59,6 @@ export function FeatureFlags(){
           <button className="rounded-lg bg-blue-600 px-5 py-2.5 text-white hover:bg-blue-700"         onClick={() => setOpen(true)}
             onClick={() => setIsOpen(true)}> + Create Flag </button>
               <CreateFeatureFlag open={isOpen} onClose={() => setIsOpen(false)}  setFlags={setFlags}/>
-        </div>
-
-        {/* Search */}
-        <div className="mb-4 flex gap-4">
-          <input placeholder="Search flags..." className="flex-1 rounded-lg border bg-white px-4 py-2" />
-
-          <select className="rounded-lg border bg-white px-4 py-2">
-            <option>All Environments</option>
-            <option>Development</option>
-            <option>Staging</option>
-            <option>Production</option>
-          </select>
         </div>
 
         {/* Table */}
@@ -130,6 +126,7 @@ export function FeatureFlags(){
         </div>
       </div>
     </div>  
-     </div>
+    <AssistantChat onFlagOperation={fetchFeatureFlags} />
+ </div>
   );
 }

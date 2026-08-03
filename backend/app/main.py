@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from app.database import create_tables
 from app.routers import users
 from app.routers import features
+from app.routers import assistant
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -22,3 +23,4 @@ async def startup():
 
 app.include_router(users.router)
 app.include_router(features.router)
+app.include_router(assistant.router)

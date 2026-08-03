@@ -140,28 +140,6 @@ export function CreateFeatureFlag({ open, onClose, setFlags }: CreateFeatureFlag
 
             </div>
 
-            {/* Right */}
-
-            <div className="rounded-xl bg-slate-50 p-5">
-
-              <h3 className="font-semibold text-lg">
-                🤖 AI Assistant
-              </h3>
-
-              <p className="text-sm text-slate-500 mt-2">
-                Describe your feature and AI will
-                generate a suggested configuration.
-              </p>
-
-              <textarea
-                rows={5}
-                className="mt-4 w-full rounded-lg border p-3"
-                placeholder="Enable new checkout for premium users..."
-              />
-
-              <button
-                className="mt-4 w-full rounded-lg bg-purple-600 py-3 text-white hover:bg-purple-700" > Generate </button> 
-            </div>
           </div>
 
           <div className="flex justify-end gap-3 border-t px-8 py-5">
