@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import api from "../api/client";
 import {CreateFeatureFlag} from "./CreateFeatureFlagPage";
 import type { FeatureFlag } from "../types/featureFlag";
 import { EditFeatureFlag } from "./EditFeatureFlagPage";
 import { Pencil, Trash2 } from "lucide-react";
 import { AssistantChat } from "../components/AssistantChat";
+import {fetchFeatureFlags, toggleFeatureFlag, deleteFeatureFlag} from "../services/featureFlagApi";
 
 
 export function FeatureFlags(){
@@ -14,19 +14,19 @@ export function FeatureFlags(){
   const [selectedFlag, setSelectedFlag] = useState<FeatureFlag | null>(null);
   const [editOpen, setEditOpen] = useState(false);
 
-    const fetchFeatureFlags = async () => {
+    const loadFeatureFlags = async () => {
     try {
-        const response = await api.get("/feature-flags");
-        setFlags(response.data);
+        const response = await fetchFeatureFlags();
+        setFlags(response);
     } catch (err) {
         console.error(err);
     }
 };
 
-    const toggleFlag = async (id: number, enabled: boolean) => {
+    const toggleFeatureFlagStatus = async (id: number, enabled: boolean) => {
       try {
-        await api.patch(`/feature-flags/${id}`, { enabled: !enabled });
-        setFlags(prev => prev.map(flag => flag.id === id ? { ...flag, enabled: !enabled } : flag ) );
+        await toggleFeatureFlag(id, !enabled);
+        setFlags(flags => flags.map(flag => flag.id === id ? { ...flag, enabled: !enabled } : flag ) );
       } catch (error) {
         console.error("Failed to update flag", error);
       }
@@ -34,14 +34,14 @@ export function FeatureFlags(){
 
     const deleteFlag = async (id: number) => {
       try {
-        await api.delete(`/feature-flags/${id}`);
-        setFlags(prev => prev.filter(flag => flag.id !== id) );
+        await deleteFeatureFlag(id);
+        setFlags(flags => flags.filter(flag => flag.id !== id) );
       } catch (error) {
         console.error("Failed to delete flag", error);
       }
   };
 
-    useEffect(() => { fetchFeatureFlags(); }, []);
+    useEffect(() => { loadFeatureFlags(); }, []);
 
  return (
     <div className="min-h-screen bg-slate-100 p-8">
@@ -103,7 +103,7 @@ export function FeatureFlags(){
                 
                   <td className="px-6 py-4">
                     <button
-                      onClick={() => toggleFlag(flag.id, flag.enabled)}
+                      onClick={() => toggleFeatureFlagStatus(flag.id, flag.enabled)}
                       className={`relative h-6 w-11 rounded-full transition ${ flag.enabled ? "bg-green-500" : "bg-gray-300" }`}
                     >
                       <span
@@ -126,7 +126,7 @@ export function FeatureFlags(){
         </div>
       </div>
     </div>  
-    <AssistantChat onFlagOperation={fetchFeatureFlags} />
+    <AssistantChat onFlagOperation={loadFeatureFlags} />
  </div>
   );
 }

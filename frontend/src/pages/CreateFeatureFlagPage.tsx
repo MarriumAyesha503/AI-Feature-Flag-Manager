@@ -1,6 +1,7 @@
 import { useState } from "react";
 import api from "../api/client";
 import type { FeatureFlag } from "../types/featureFlag";
+import { createFeatureFlag } from "../services/featureFlagApi";
 
 interface CreateFeatureFlagProps{
   open: boolean;
@@ -18,7 +19,7 @@ export function CreateFeatureFlag({ open, onClose, setFlags }: CreateFeatureFlag
           const environments = [ "dev", "test", "stage", "prod" ];
 
           const handleSubmit = async () => {
-            const newFlag = {
+            const newFlag: FeatureFlag = {
               name: name,
               description: description,
               enabled,
@@ -28,8 +29,8 @@ export function CreateFeatureFlag({ open, onClose, setFlags }: CreateFeatureFlag
             };
 
               try {
-                    const response = await api.post("/feature-flags/create", newFlag);
-                    setFlags((previousFlags) => [ ...previousFlags, response.data]);
+                    const response = await createFeatureFlag(newFlag);
+                    setFlags((previousFlags) => [ ...previousFlags, response ]);
                     alert("Feature flag created!");
                      onClose();
               } catch (err) {

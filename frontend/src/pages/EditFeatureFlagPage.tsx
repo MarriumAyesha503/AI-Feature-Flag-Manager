@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import api from "../api/client";
 import type { FeatureFlag } from "../types/featureFlag";
+import { updateFeatureFlag } from "../services/featureFlagApi";
 
 interface EditFeatureFlagProps{
   open: boolean;
@@ -31,8 +32,8 @@ export function EditFeatureFlag({ open, onClose, selectedFlag, setFlags }: EditF
         if (!selectedFlag) return;
 
         try {
-        const response = await api.patch( `/feature-flags/${selectedFlag.id}`, { name, description, enabled } );
-        setFlags(prev => prev.map(flag => flag.id === selectedFlag.id ? response.data : flag ) );
+        const response = await updateFeatureFlag(selectedFlag.id!, { name, description, enabled });
+        setFlags(flags => flags.map(flag => flag.id === selectedFlag.id ? response : flag ) );
         onClose();
 
 

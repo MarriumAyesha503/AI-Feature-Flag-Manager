@@ -1,24 +1,18 @@
 import { useState } from "react";
 import { Bot, Send, X } from "lucide-react";
 import api from "../api/client";
+import {sendAssistantMessage} from "../services/assistantApi";
 
 type AssistantChatProps = {
     onFlagOperation: () => Promise<void>;
 };
+type Message = { 
+  role: "user" | "assistant"; 
+  content: string; 
+};
 
 export function AssistantChat( {onFlagOperation}: AssistantChatProps ) {
       console.log("AssistantChat rendered");
-
-    async function sendAssistantMessage(message: string) {
-  const response = await api.post( `/assistant`, { message } );
-  return response.data;
-}
-
-type Message = {
-  role: "user" | "assistant";
-  content: string;
-};
-
 
   const [open, setOpen] = useState(false);
 
@@ -45,9 +39,7 @@ type Message = {
 
     const response =
       await sendAssistantMessage(input);
-
     setMessages(prev => [ ...prev, { role: "assistant", content: response.response } ]);
-
     await onFlagOperation();
   }
 
